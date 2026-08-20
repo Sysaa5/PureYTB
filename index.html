@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OBS 纯净 YouTube 播放器</title>
+    <style>
+        /* 彻底清除所有边距和滚动条 */
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;  /* 禁止滚动条 */
+            background: #000;  /* 黑底 */
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // 1. 从 URL 中获取 v= 参数（例如：?v=dQw4w9WgXcQ）
+        const params = new URLSearchParams(window.location.search);
+        let videoId = params.get('v');
+
+        // --- 【可选】如果你想固定播放某个视频，懒得每次加参数 ---
+        // 把下面这行的注释去掉（删除前面的 //），并把 YOUR_VIDEO_ID 换成你的视频 ID
+        // if (!videoId) videoId = 'YOUR_VIDEO_ID_HERE';
+
+        if (videoId) {
+            // 构建嵌入链接（autoplay=1 自动播放，rel=0 不显示关联视频，modestbranding 简约LOGO）
+            const src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0&controls=1&rel=0&modestbranding=1&iv_load_policy=3`;
+            document.body.innerHTML = `<iframe src="${src}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        } else {
+            // 如果忘记加参数，页面会显示提示（在OBS里会显示黑底白字方便调试）
+            document.body.innerHTML = `<div style="display:flex;justify-content:center;align-items:center;height:100%;color:#ccc;font-family:sans-serif;font-size:20px;background:#1e1e1e;text-align:center;padding:20px;">⚠️ 请在 OBS 的 URL 末尾加上 <br> <b style="color:#fff;">?v=视频ID</b></div>`;
+        }
+    </script>
+</body>
+</html>
